@@ -18,11 +18,12 @@ class Hangman():
     See `Wikipedia article on Hangman <https://en.wikipedia.org/wiki/Hangman_(game)>`_
     """
 
-    _word_to_guess = SecretWord("akcja")
+    _word_to_guess = None
     _GUESS_LIMIT = 5
     _guess_counter = 0
 
-    def main(self):
+    def main(self, word_to_guess):
+        self._word_to_guess = SecretWord(word_to_guess.lower())
         while not self.is_over():
             letter = input("Please guess one letter: ")
             self._guess_counter += 1
