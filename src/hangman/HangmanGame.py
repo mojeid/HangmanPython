@@ -18,11 +18,13 @@ class Hangman():
     See `Wikipedia article on Hangman <https://en.wikipedia.org/wiki/Hangman_(game)>`_
     """
 
-    _word_to_guess = SecretWord("Akcja")
+    _word_to_guess = SecretWord("akcja")
 
     def main(self):
-        letter = input("Please guess one letter")
-        self.display_word_to_user()
+        while not self.is_over():
+            letter = input("Please guess one letter: ")
+            self.verify_letter(letter.lower())
+            self.display_word_to_user()
 
     def verify_letter(self, letter):
         """
@@ -30,20 +32,26 @@ class Hangman():
         :param letter: Letter which player provided.
         :return: True or False
         """
-        pass
+        if len(letter) > 1:
+            print("Please guess 1 letter at the time!")
+            return
+
+        word = self._word_to_guess.word
+        for idx in [i for i, x in enumerate(word) if x == letter]:
+            self._word_to_guess.status[idx] = True
 
     def display_word_to_user(self):
         """
         Displays word with current guessed/not guessed status to the player.
         :return:
         """
-        to_display = []
+        result = []
         for idx, value in enumerate(self._word_to_guess.status):
             if value:
-                to_display.append(self._word_to_guess.word(idx))
+                result.append(self._word_to_guess.word[idx])
             else:
-                to_display.append("_")
-        print(to_display)
+                result.append("_")
+        print(result)
 
     def is_over(self):
         """
@@ -53,3 +61,6 @@ class Hangman():
 
         :return: True or False
         """
+        if all(self._word_to_guess.status):
+            print("Congratulations, you won!")
+            return True
