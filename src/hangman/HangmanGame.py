@@ -19,10 +19,13 @@ class Hangman():
     """
 
     _word_to_guess = SecretWord("akcja")
+    _GUESS_LIMIT = 5
+    _guess_counter = 0
 
     def main(self):
         while not self.is_over():
             letter = input("Please guess one letter: ")
+            self._guess_counter += 1
             self.verify_letter(letter.lower())
             self.display_word_to_user()
 
@@ -43,7 +46,6 @@ class Hangman():
     def display_word_to_user(self):
         """
         Displays word with current guessed/not guessed status to the player.
-        :return:
         """
         result = []
         for idx, value in enumerate(self._word_to_guess.status):
@@ -59,8 +61,14 @@ class Hangman():
             #. Player guessed the word properly
             #. Player exceed maximum number of guesses (since version 1.1)
 
-        :return: True or False
+        :return: True if game should end now, False otherwise
         """
         if all(self._word_to_guess.status):
             print("Congratulations, you won!")
             return True
+
+        if self._guess_counter > self._GUESS_LIMIT:
+            print("Guess limit exceeded, YOU LOST")
+            return True
+        else:
+            return False
